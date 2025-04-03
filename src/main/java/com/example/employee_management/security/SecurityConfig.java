@@ -5,9 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,7 +26,8 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) // Disable CSRF for testing
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/employees/**").hasAnyRole("ADMIN", "USER") // Users & Admins can access employees
+                .requestMatchers("/h2-console/**").permitAll() // Allow H2 Console access
+                .requestMatchers("/employees/**").hasAnyRole("ADMIN", "USER") // Protect Employees API
                 .anyRequest().permitAll()
             )
             .formLogin(login -> login.defaultSuccessUrl("/employees", true)) // Redirect to employees after login
@@ -36,6 +35,8 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

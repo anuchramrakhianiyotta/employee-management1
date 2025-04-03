@@ -24,7 +24,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRole().replace("ROLE_", "")) // Convert "ROLE_ADMIN" to "ADMIN"
+                .roles(user.getRole()) // No need to replace "ROLE_"
                 .build();
     }
 }
+// Compare this snippet from src/main/java/com/example/employee_management/security/SecurityConfig.java:
+// BEGIN @Configuration
+// @EnableWebSecurity
+// public class SecurityConfig extends WebSecurityConfigurerAdapter
+//     @Autowired
+//     private CustomUserDetailsService userDetailsService;
+//     @Autowired
