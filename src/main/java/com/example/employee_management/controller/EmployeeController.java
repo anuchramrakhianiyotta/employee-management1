@@ -22,8 +22,9 @@ public class EmployeeController {
     // GET All Employees (Accessible by ADMIN and USER)
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public ResponseEntity<List<Employee>> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        return ResponseEntity.ok(employees);
     }
 
     // GET Employee by ID (Accessible by ADMIN and USER)
@@ -31,16 +32,16 @@ public class EmployeeController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
         Optional<Employee> employee = employeeRepository.findById(id);
-        return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(employee.get());
     }
 
     // CREATE Employee (Accessible by ADMIN and USER)
     @PostMapping
-@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-public Employee createEmployee(@RequestBody Employee employee) {
-    return employeeRepository.save(employee);
-}
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+        Employee savedEmployee = employeeRepository.save(employee);
+        return ResponseEntity.status(201).body(savedEmployee);
+    }
 
     // UPDATE Employee (Accessible by ADMIN and USER)
     @PutMapping("/{id}")
@@ -51,7 +52,8 @@ public Employee createEmployee(@RequestBody Employee employee) {
                     employee.setFirstName(updatedEmployee.getFirstName());
                     employee.setDepartment(updatedEmployee.getDepartment());
                     employee.setSalary(updatedEmployee.getSalary());
-                    return ResponseEntity.ok(employeeRepository.save(employee));
+                    Employee savedEmployee = employeeRepository.save(employee);
+                    return ResponseEntity.ok(savedEmployee);
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

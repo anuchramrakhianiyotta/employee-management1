@@ -32,11 +32,14 @@ public class EmployeeService {
 
         employee.setFirstName(employeeDetails.getFirstName());
         employee.setLastName(employeeDetails.getLastName());
+        employee.setDepartment(employeeDetails.getDepartment());
+        employee.setSalary(employeeDetails.getSalary());
         employee.setAddress(employeeDetails.getAddress());
         employee.setMobile(employeeDetails.getMobile());
 
         return employeeRepository.save(employee);
     }
+
 
     public void deleteEmployee(Long id) {
         employeeRepository.deleteById(id);
