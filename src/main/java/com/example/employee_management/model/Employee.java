@@ -1,9 +1,13 @@
 package com.example.employee_management.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "employees")
+@Getter
+@Setter
 public class Employee {
 
     @Id
@@ -17,10 +21,8 @@ public class Employee {
     private String address;
     private String mobile;
 
-    // Default Constructor
     public Employee() {}
 
-    // Constructor
     public Employee(String firstName, String lastName, String department, double salary, String address, String mobile) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,9 +32,12 @@ public class Employee {
         this.mobile = mobile;
     }
 
-    // Getters and Setters
-    public Long getId() {
+    /*public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -81,5 +86,5 @@ public class Employee {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
+    }*/
 }

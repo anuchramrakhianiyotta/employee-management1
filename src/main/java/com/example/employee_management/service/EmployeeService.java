@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EmployeeService {
+public class EmployeeService implements IEmployee {
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -26,9 +26,11 @@ public class EmployeeService {
         return employeeRepository.findById(id);
     }
 
-    public Employee updateEmployee(Long id, Employee employeeDetails) {
+    public Employee updateEmployee(Long id, Employee employeeDetails)
+    {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
+
 
         employee.setFirstName(employeeDetails.getFirstName());
         employee.setLastName(employeeDetails.getLastName());
@@ -40,8 +42,10 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-
     public void deleteEmployee(Long id) {
+        if (!employeeRepository.existsById(id)) {
+            throw new RuntimeException("Employee not found with id: " + id);
+        }
         employeeRepository.deleteById(id);
     }
 }
