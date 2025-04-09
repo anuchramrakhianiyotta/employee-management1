@@ -8,7 +8,8 @@ import lombok.Setter;
 @Table(name = "employees")
 @Getter
 @Setter
-public class Employee {
+public class Employee
+{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +24,8 @@ public class Employee {
 
     public Employee() {}
 
-    public Employee(String firstName, String lastName, String department, double salary, String address, String mobile) {
+    public Employee(String firstName, String lastName, String department, double salary, String address, String mobile)
+    {
         this.firstName = firstName;
         this.lastName = lastName;
         this.department = department;
@@ -31,60 +33,4 @@ public class Employee {
         this.address = address;
         this.mobile = mobile;
     }
-
-    /*public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }*/
 }

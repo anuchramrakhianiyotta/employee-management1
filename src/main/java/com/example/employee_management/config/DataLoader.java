@@ -1,26 +1,32 @@
 package com.example.employee_management.config;
 
+import com.example.employee_management.model.Role;
 import com.example.employee_management.model.User;
+import com.example.employee_management.repository.RoleRepository;
 import com.example.employee_management.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class DataLoader {
 
     @Bean
-    CommandLineRunner initDatabase(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    CommandLineRunner initDatabase(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            // For older Java versions, use !isPresent() instead of isEmpty()
-            if (!userRepository.findByUsername("admin").isPresent()) {
-                User admin = new User("admin", passwordEncoder.encode("admin123"), "ADMIN");
-                userRepository.save(admin);
+            Role adminRole = roleRepository.findByName("ADMIN")
+                    .orElseGet(() -> roleRepository.save(new Role("ADMIN")));
+
+            Role userRole = roleRepository.findByName("USER")
+                    .orElseGet(() -> roleRepository.save(new Role("USER")));
+
+            if (userRepository.findByUsername("admin").isEmpty()) {
+                userRepository.save(new User(1L,"admin", passwordEncoder.encode("admin123"), adminRole));
             }
 
-            if (!userRepository.findByUsername("user").isPresent()) {
-                User user = new User("user", passwordEncoder.encode("user123"), "USER");
-                userRepository.save(user);
+            if (userRepository.findByUsername("user").isEmpty()) {
+                userRepository.save(new User(2L,"user", passwordEncoder.encode("user123"), userRole));
             }
         };
     }

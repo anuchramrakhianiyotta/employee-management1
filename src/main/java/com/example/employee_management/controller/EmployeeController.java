@@ -1,6 +1,7 @@
 package com.example.employee_management.controller;
 
 import com.example.employee_management.model.Employee;
+
 import com.example.employee_management.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/employees")
-public class EmployeeController {
+public class EmployeeController
+{
 
     @Autowired
     private EmployeeService employeeService;
@@ -20,14 +22,16 @@ public class EmployeeController {
     // GET All Employees (Accessible by ADMIN and USER)
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<List<Employee>> getAllEmployees() {
+    public ResponseEntity<List<Employee>> getAllEmployees()
+    {
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
     // GET Employee by ID (Accessible by ADMIN and USER)
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<?> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<?> getEmployeeById(@PathVariable Long id)
+    {
         Optional<Employee> employee = employeeService.getEmployeeById(id);
         return employee.isPresent()
                 ? ResponseEntity.ok(employee.get())
@@ -45,7 +49,8 @@ public class EmployeeController {
     // UPDATE Employee (Accessible by ADMIN and USER)
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<?> updateEmployee(@PathVariable Long id, @RequestBody Employee updatedEmployee) {
+    public ResponseEntity<?> updateEmployee(@PathVariable Long id, @RequestBody Employee updatedEmployee)
+    {
         try {
             Employee savedEmployee = employeeService.updateEmployee(id, updatedEmployee);
             return ResponseEntity.ok(savedEmployee);
@@ -57,7 +62,8 @@ public class EmployeeController {
     // DELETE Employee (Accessible by ADMIN only)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<?> deleteEmployee(@PathVariable Long id)
+    {
         try {
             employeeService.deleteEmployee(id);
             return ResponseEntity.noContent().build();
