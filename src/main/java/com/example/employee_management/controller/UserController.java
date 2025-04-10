@@ -1,15 +1,21 @@
 package com.example.employee_management.controller;
+
 import com.example.employee_management.model.Role;
 import com.example.employee_management.model.User;
 import com.example.employee_management.repository.RoleRepository;
 import com.example.employee_management.repository.UserRepository;
+import com.example.employee_management.dto.UserDTO;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 import jakarta.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -29,22 +35,25 @@ public class UserController {
             return ResponseEntity.badRequest().body("Error: Username already exists");
         }
 
-        // Lookup role from DB
         Role role = roleRepository.findByName(userPayload.getRole().getName())
                 .orElseThrow(() -> new RuntimeException("Role not found: " + userPayload.getRole().getName()));
 
-        // Set encrypted password and role
-        userPayload.setPassword(passwordEncoder.encode(userPayload.getPassword()));
-        userPayload.setRole(role);
+        log.info("role : {}", role);
 
-        userRepository.save(userPayload);
+        User newUser = new User();
+        newUser.setUsername(userPayload.getUsername());
+        newUser.setPassword(passwordEncoder.encode(userPayload.getPassword()));
+        newUser.setRole(role);
+
+        userRepository.save(newUser);
         return ResponseEntity.ok("User registered successfully!");
     }
 
-    // Optional: test
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> new UserDTO(user.getUsername(), user.getRole().getName()))
+                .toList();
     }
 }
-

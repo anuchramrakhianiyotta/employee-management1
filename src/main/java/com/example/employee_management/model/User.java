@@ -1,37 +1,46 @@
-package com.example.employee_management.model;
+package com.example.employee_management.model; // This declares the model package
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.*; // JPA annotations
+import lombok.Getter;
+import lombok.Setter;
 
-@Setter
 @Getter
-@Builder
-@Entity
-@Table(name = "users")
-public class User
-{
+@Setter
+@Entity // Marks this class as a JPA entity (maps to a table)
+@Table(name = "users") // Explicitly names the DB table as 'users'
+public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // Primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremented ID
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false) // Must be unique and not null
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // Must be present
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+    // Many users can have the same role (e.g., many users with 'USER' role)
+    @ManyToOne(fetch = FetchType.EAGER) // Fetch role eagerly to avoid lazy load issues
+    @JoinColumn(name = "role_id", nullable = false) // Foreign key column
     private Role role;
 
-    public User(Long id, String username, String password, Role role) {
-        this.id = id;
+    // Default constructor — required by JPA
+    public User() {}
+
+    // Custom constructor for easy creation
+    public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;
     }
 
-    public User() {
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", role=" + (role != null ? role.getName() : "null") +
+                '}';
     }
 }
