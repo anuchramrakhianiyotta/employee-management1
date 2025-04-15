@@ -30,8 +30,6 @@ public class EmployeeService implements IEmployee {
     {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
-
-
         employee.setFirstName(employeeDetails.getFirstName());
         employee.setLastName(employeeDetails.getLastName());
         employee.setDepartment(employeeDetails.getDepartment());

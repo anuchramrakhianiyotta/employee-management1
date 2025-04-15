@@ -36,10 +36,9 @@ public class Role {
 
     @Override
     public String toString() {
-        return "Role {" +
+        return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", usersCount=" + (users != null ? users.size() : 0) +
                 '}';
     }
 }
